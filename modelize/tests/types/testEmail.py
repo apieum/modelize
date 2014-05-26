@@ -31,8 +31,5 @@ class EmailTest(StringTest()):
         obj.text = expected
         self.assertEqual(obj.text, expected)
 
-    def make_obj(self, value=None):
-        if value is None:
-            return Email()
-        else:
-            return Email(value)
+    def make_obj(self, *args):
+        return Email(*args)

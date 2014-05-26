@@ -20,8 +20,5 @@ class StringTest(TestCase):
             obj = model()
             obj.text
 
-    def make_obj(self, value=None):
-        if value is None:
-            return String()
-        else:
-            return String(value)
+    def make_obj(self, *args):
+        return String(*args)
