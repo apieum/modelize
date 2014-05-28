@@ -1,16 +1,16 @@
 # -*- coding: utf8 -*-
-from eventize.attribute import Attribute, Subject, OnGetDescriptor, OnSetDescriptor, OnDelDescriptor, OnChangeDescriptor
+from eventize.attribute import Attribute, Subject, OnGetHandler, OnSetHandler, OnDelHandler, OnChangeHandler
 
-class GetHandler(OnGetDescriptor):
+class GetHandler(OnGetHandler):
     __alias__ = 'on_get'
 
-class SetHandler(OnSetDescriptor):
+class SetHandler(OnSetHandler):
     __alias__ = 'on_set'
 
-class DelHandler(OnDelDescriptor):
+class DelHandler(OnDelHandler):
     __alias__ = 'on_del'
 
-class ChangeHandler(OnChangeDescriptor):
+class ChangeHandler(OnChangeHandler):
     __alias__ = 'on_change'
 
 
