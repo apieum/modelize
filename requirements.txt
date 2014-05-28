@@ -1,2 +1,1 @@
-modelize
 eventize>=0.4.1
