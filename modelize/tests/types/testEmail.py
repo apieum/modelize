@@ -24,6 +24,9 @@ class EmailTest(StringTest()):
         with self.assertRaises(TypeError):
             self.obj.text = 'user12.good@domain'
 
+        with self.assertRaises(TypeError):
+            self.obj.text = 'user12@bad@domain'
+
         expected = 'user12.good@domain.good'
         self.obj.text = expected
         self.assertEqual(self.obj.text, expected)

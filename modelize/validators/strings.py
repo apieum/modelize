@@ -1,44 +1,41 @@
 # -*- coding: utf8 -*-
 import re
-from .exception import ValidationError
-
-def is_string(event):
-    if isinstance(event.value, str): return True
-    value = getattr(event, 'value', 'undefined_value')
-    name = getattr(event, 'name', 'unknown_attribute')
-    cls_name = getattr(type(event.subject), '__name__', 'class')
-    raise ValidationError("%s.%s = '%s' must be a str." % (cls_name, name, value))
-
-
+from .validator import Validator
 
 
 user_match = re.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*$").match
 domain_match = re.compile("^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$").match
-
 strict_user_match = re.compile("^[a-z0-9][a-z0-9_-]+(?:\.[a-z0-9_-]+)*$").match
 
-def has_user_and_domain(email):
-    address = email.split('@')
-    if len(address) != 2:
-        raise ValidationError("an email address must contains @")
-    return address
 
+def instance_of_str(value):
+    return isinstance(value, str)
 
-def is_email(event):
-    is_string(event)
-    user, domain = has_user_and_domain(event.value)
-    if user_match(user) is None:
-        raise ValidationError("'%s' is not a valid user for an email address" % user)
-    if domain_match(domain) is None:
-        raise ValidationError("'%s' is not a valid domain for an email address" % domain)
-    return True
+def has_one_at(email):
+    return email.count('@') == 1
 
-def is_strict_email(event):
-    is_string(event)
-    user, domain = has_user_and_domain(event.value)
-    if strict_user_match(user) is None:
-        raise ValidationError("'%s' is not a valid user for an email address" % user)
-    if domain_match(domain) is None:
-        raise ValidationError("'%s' is not a valid domain for an email address" % domain)
-    return True
+def has_user(value):
+    user = value[:value.index('@')]
+    return user_match(user) is not None
 
+def has_strict_user(value):
+    user = value[:value.index('@')]
+    return strict_user_match(user) is not None
+
+def has_domain(value):
+    domain = value[value.index('@') + 1:]
+    return domain_match(domain) is not None
+
+is_email = Validator()
+is_email += instance_of_str, "{cls_name}.{name} = '{value}' must be a str."
+is_email += has_one_at, "an email address must contains one @"
+is_email += has_user, "'{value}' is not a valid user for an email address"
+is_email += has_domain, "'{value}' is not a valid domain for an email address"
+
+is_strict_email = Validator()
+is_strict_email += instance_of_str, "{cls_name}.{name} = '{value}' must be a str."
+is_strict_email += has_one_at, "an email address must contains one @"
+is_strict_email += has_strict_user, "'{value}' is not a valid user for an email address"
+is_strict_email += has_domain, "'{value}' is not a valid domain for an email address"
+
+is_string = Validator((instance_of_str, "{cls_name}.{name} = '{value}' must be a str."))
