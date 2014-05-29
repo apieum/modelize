@@ -13,7 +13,7 @@ class IntegerTest(TestCase):
         self.assertEqual(obj, expected)
 
     def test_it_can_be_converted_to_float(self):
-        expected = 42
+        expected = -0o10
         obj = self.make_obj(expected)
         self.assertEqual(float(obj), float(expected))
 
