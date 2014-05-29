@@ -3,8 +3,8 @@ from ..handlers import Attribute, AttrModule
 from ..validators.strings import is_string
 
 class String(Attribute, str):
-    on_set = AttrModule.Get(condition=is_string)
-    on_get = AttrModule.Set()
+    on_get = AttrModule.Get()
+    on_set = AttrModule.Set(condition=is_string)
     on_del = AttrModule.Del()
     on_change = AttrModule.Change()
 
