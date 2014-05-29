@@ -7,7 +7,7 @@ class Validator(object):
     def __init__(self, *callbacks):
         self.callbacks = list(callbacks)
 
-    def check(self, event):
+    def __call__(self, event):
         value = getattr(event, 'value')
         subject = getattr(event, 'subject', 'undefined_subject')
         name = getattr(event, 'name', 'unknown_attribute')
@@ -18,8 +18,6 @@ class Validator(object):
 
     def trigger_error(self, message, *args, **kwargs):
         raise ValidationError(self.formatter.format(message, *args, **kwargs))
-
-    __call__ = check
 
     def __iadd__(self, value):
         self.callbacks.append(value)
