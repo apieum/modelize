@@ -30,6 +30,9 @@ class Validator(object):
             self.callbacks.remove(value)
         return self
 
+    def duplicate(self):
+        return type(self)(*self.callbacks)
+
 
 
 class ValidationError(TypeError):

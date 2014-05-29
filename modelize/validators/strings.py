@@ -32,10 +32,7 @@ is_email += has_one_at, "an email address must contains one @"
 is_email += has_user, "'{value}' is not a valid user for an email address"
 is_email += has_domain, "'{value}' is not a valid domain for an email address"
 
-is_strict_email = Validator()
-is_strict_email += instance_of_str, "{cls_name}.{name} = '{value}' must be a str."
-is_strict_email += has_one_at, "an email address must contains one @"
-is_strict_email += has_strict_user, "'{value}' is not a valid user for an email address"
-is_strict_email += has_domain, "'{value}' is not a valid domain for an email address"
+is_strict_email = is_email.duplicate()
+is_strict_email.callbacks[2] = has_strict_user, "'{value}' is not a valid user for an email address"
 
 is_string = Validator((instance_of_str, "{cls_name}.{name} = '{value}' must be a str."))
